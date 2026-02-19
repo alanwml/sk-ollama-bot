@@ -31,37 +31,18 @@ async def run_conversation(
         Tuple of (updated thread, total completion usage)
     """
     completion_usage = CompletionUsage()
-    
-    # for user_input in user_inputs:
-    #     print(f"\n# User: '{user_input}'")
-    #     agent_logger.info(f"[User Input]: {user_input}")
-        
-    #     full_response = ""
-    #     async for response in agent.invoke_stream(
-    #         messages=user_input,
-    #         thread=thread,
-    #     ):
-    #         if response.content:
-    #             print(response.content, end="", flush=True)
-    #             full_response += str(response.content)
-                
-    #         if response.metadata.get("usage"):
-    #             completion_usage += response.metadata["usage"]
-    #             agent_logger.info(f"[Token Usage]: {response.metadata['usage']}")
-    #             agent_logger.info(f"[Model Usage]: {response.metadata['model']}")
-    #         thread = response.thread
-        
-    #     # Log the complete response after streaming
-    #     if full_response:
-    #         agent_logger.info(f"[Agent Response]: {full_response}")
-
-    #     print()
 
     for user_input in user_inputs:
         print(f"# User: '{user_input}'")
-        response = await agent.get_response(messages=user_input, thread=thread)
-        thread = response.thread
-        _write_content(response)
+        
+        # Use invoke to properly handle function calling
+        async for response in agent.invoke(messages=user_input, thread=thread):
+            _write_content(response)
+            
+            if response.metadata.get("usage"):
+                completion_usage += response.metadata["usage"]
+            
+            thread = response.thread
 
         print()
     

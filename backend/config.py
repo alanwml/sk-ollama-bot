@@ -7,6 +7,10 @@ ENV: dict[str, Any] = {
     "OLLAMA_CHAT_MODEL_ID": None,
     "OLLAMA_HOST": None,
     "OLLAMA_SERVICE_ID": None,
+    "AZURE_OPENAI_CHAT_DEPLOYMENT_NAME": None,
+    "AZURE_OPENAI_API_KEY": None,
+    "AZURE_OPENAI_BASE_URL": None,
+    "AZURE_OPENAI_API_VERSION": None,
 }
 
 def load_and_validate_environment():
