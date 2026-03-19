@@ -34,6 +34,7 @@ def _create_Ollama_chat_service() -> OllamaChatCompletion:
 def create_menu_agent() -> ChatCompletionAgent:
     """Create a menu recommendation agent with configured kernel and plugins."""
     kernel = Kernel()
+    # kernel.add_service(_create_Ollama_chat_service())
     kernel.add_service(_create_AzureOpenAI_chat_service())
     kernel.add_plugin(plugin=MenuPlugin(), plugin_name="menu")  # Fixed: Pass an instance, not the class
 

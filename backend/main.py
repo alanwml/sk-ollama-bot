@@ -1,7 +1,6 @@
 """Main entry point for the Ollama chatbot."""
 import asyncio
 from semantic_kernel.agents import ChatHistoryAgentThread
-from semantic_kernel.agents.azure_ai.azure_ai_agent import AzureAIAgent, AzureAIAgentThread
 from config import load_and_validate_environment
 from logging_utils import setup_agent_logging, current_conversation_id
 from agent_factory import create_menu_agent
@@ -18,11 +17,12 @@ async def main() -> None:
     
     # Create agent and conversation thread
     agent = create_menu_agent()
-    thread = await AzureAIAgentThread.create(thread_id="thread-1")
-    
-    if thread.id:
-        current_conversation_id.set(thread.id)
-        print(thread.id)
+    thread = ChatHistoryAgentThread(thread_id="thread-1")
+
+    thread_id = getattr(thread, "id", None)
+    if thread_id:
+        current_conversation_id.set(thread_id)
+        print(thread_id)
         async for msg in thread.get_messages():
             print(f"Thread Message: {msg}")
     
